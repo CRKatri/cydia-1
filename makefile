@@ -20,8 +20,8 @@ endif
 
 ifeq ($(shell uname -s),Linux)
 gxx := aarch64-apple-darwin-clang++
-sdk := $(HOME)/cctools/SDK/iPhoneOS.sdk
-mac := $(HOME)/cctools/SDK/MacOSX.sdk
+sdk := $(TARGET_SYSROOT)
+mac := $(MACOSX_SYSROOT)
 else ifeq ($(shell uname -s),Darwin)
 gxx := $(shell xcrun --sdk $(kind) -f g++)
 sdk := $(THEOS)/sdks/iPhoneOS13.7.sdk
@@ -284,7 +284,7 @@ Objects/libapt32.a: $(libapt32)
 
 Objects/libapt64.a: $(libapt64)
 	@echo "[arch] $@"
-	@ar -rc $@ $^
+	@aarch64-apple-darwin-ar -rc $@ $^
 
 MobileCydia: $(object) entitlements.xml $(lapt)
 	@echo "[link] $@"
@@ -292,7 +292,7 @@ MobileCydia: $(object) entitlements.xml $(lapt)
 	@mkdir -p bins
 	@cp -a $@ bins/$@-$(version)_$(shell date +%s)
 	@echo "[strp] $@"
-	@grep '~' <<<"$(version)" >/dev/null && echo "skipping..." || strip $@
+	@aarch64-apple-darwin-strip $@
 	@echo "[uikt] $@"
 	@./uikit.sh $@
 
@@ -344,7 +344,7 @@ debs/cydia_$(version)_iphoneos-arm.deb: MobileCydia preinst postinst cydo $(imag
 	mkdir -p debs
 	ln -sf debs/cydia_$(version)_iphoneos-arm.deb Cydia.deb
 	$(dpkg) -b _ Cydia.deb
-	@echo "$$(stat -L -f "%z" Cydia.deb) $$(stat -f "%Y" Cydia.deb)"
+	@echo "$$(stat -L -c "%z" Cydia.deb) $$(stat -c "%Y" Cydia.deb)"
 
 package: debs/cydia_$(version)_iphoneos-arm.deb
 

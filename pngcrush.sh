@@ -13,10 +13,10 @@ copy=("${src}" "${dst}")
 function step() {
     "$@"
     mv -f "${dst}" "${src}"
-    steps+=($(stat -f "%z" "${src}"))
+    steps+=($(stat -c "%z" "${src}"))
 }
 
-pngcrush=$(xcode-select --print-path)/Platforms/iPhoneOS.platform/Developer/usr/bin/pngcrush
+pngcrush=/usr/bin/pngcrush
 
 if grep CgBI "${png}" &>/dev/null; then
     if [[ ${png} != ${out} ]]; then
@@ -33,7 +33,7 @@ step cp -fa "${png}" "${dst}"
 #step "${pngcrush}" -q -rem alla -reduce -brute "${copy[@]}"
 #step pincrush "${copy[@]}"
 
-step "${pngcrush}" -q -rem alla -reduce -iphone "${copy[@]}"
+step "${pngcrush}" -q -rem alla -reduce "${copy[@]}"
 
 #"${pngcrush}" -q -rem alla -reduce -brute -iphone "${png}" 1.png
 #"${pngcrush}" -q -iphone _.png 2.png

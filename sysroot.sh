@@ -28,7 +28,7 @@ fi
 fi
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-	xcode=~/cctools/SDK/MacOSX.sdk
+	xcode=${MACOSX_SYSROOT}
 elif [[ "$OSTYPE" == "darwin"* ]]; then
 	xcode=$(xcodebuild -sdk macosx -version Path)
 fi

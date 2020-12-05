@@ -1207,7 +1207,7 @@ static _H<NSString> UserAgent_;
         ($JSObjectCallAsFunction)(context, object, NULL, 0, NULL, NULL);
 
     // XXX: the JavaScript code submits a form, which seems to happen asynchronously
-    NSObject *target([CyteWebViewController class]);
+    NSObject *target((NSObject *)[CyteWebViewController class]);
     [NSObject cancelPreviousPerformRequestsWithTarget:target selector:@selector(_lockJavaScript:) object:preferences];
     [target performSelector:@selector(_lockJavaScript:) withObject:preferences afterDelay:1];
 }
